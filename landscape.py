@@ -19,12 +19,22 @@ cloud_white = (255, 255, 255)
 mountain_gray = (128, 128, 128)
 river_blue = (0, 191, 255)
 
+# Sun properties
+sun_radius = 50
+sun_x = 0
+sun_speed = 1  # Speed of the sun's movement
+
 # Main game loop
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    # Move the sun
+    sun_x += sun_speed
+    if sun_x > width + sun_radius:
+        sun_x = -sun_radius  # Reset to start position when it goes off-screen
 
     # Fill the screen with sky color
     screen.fill(sky_blue)
@@ -33,7 +43,7 @@ while running:
     pygame.draw.rect(screen, grass_green, (0, height // 2, width, height // 2))
 
     # Draw the sun
-    pygame.draw.circle(screen, sun_yellow, (width // 2, height // 4), 50)
+    pygame.draw.circle(screen, sun_yellow, (sun_x, height // 4), sun_radius)
 
     # Draw the tree trunk
     pygame.draw.rect(screen, tree_brown, (width // 2 - 10, height // 2 + 50, 20, 100))
@@ -57,6 +67,9 @@ while running:
 
     # Update the display
     pygame.display.flip()
+
+    # Cap the frame rate
+    pygame.time.Clock().tick(60)  # 60 frames per second
 
 # Quit Pygame
 pygame.quit()
